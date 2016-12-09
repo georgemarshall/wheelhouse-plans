@@ -7,8 +7,13 @@ pkg_maintainer="George Marshall <george@georgemarshall.name>"
 pkg_description="The Web framework for perfectionists with deadlines."
 pkg_upstream_url=https://www.djangoproject.com/
 pkg_license=('BSD-3-Clause')
-pkg_build_deps=(core/make core/python)
-pkg_deps=(core/tzdata)
+pkg_build_deps=(
+  core/make
+  core/python
+)
+pkg_deps=(
+  core/tzdata
+)
 pkg_dirname=Django-${pkg_version}
 
 do_prepare() {
@@ -22,11 +27,15 @@ do_prepare() {
 }
 
 do_build() {
+  build_line 'Python wheel (universal)'
   make -f extras/Makefile bdist_wheel
 }
 
 do_check() {
-  pip install "dist/Django-$pkg_version-py2.py3-none-any.whl"
+  build_line 'Install python wheel'
+  pip install --no-index \
+    --find-links="$HAB_CACHE_SRC_PATH/$pkg_dirname/dist" \
+    "Django==$pkg_version"
 
   # TODO: execute runtests.py against installed version
   # https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/unit-tests/#quickstart
