@@ -8,7 +8,7 @@ pkg_shasum=21b3d1ef926d835ff23576193a2c60d4c896d8e21567850cf0677a4764122887
 pkg_maintainer="George Marshall <george@georgemarshall.name>"
 pkg_description="The uWSGI server"
 pkg_upstream_url=http://projects.unbit.it/uwsgi
-pkg_license=('	GPL-2.0')
+pkg_license=('GPL-2.0')
 pkg_build_deps=(
   core/gcc
 )
