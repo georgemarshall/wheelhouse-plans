@@ -1,7 +1,9 @@
-pkg_name=django
+python_name=Django
+pkg_name=python-django
 pkg_origin=wheelhouse
 pkg_version=1.10.4
-pkg_source=https://pypi.org/packages/source/d/${pkg_name}/Django-${pkg_version}.tar.gz
+pkg_dirname=${python_name}-${pkg_version}
+pkg_source=https://pypi.org/packages/source/d/django/${pkg_dirname}.tar.gz
 pkg_shasum=fff7f062e510d812badde7cfc57745b7779edb4d209b2bc5ea8d954c22305c2b
 pkg_maintainer="George Marshall <george@georgemarshall.name>"
 pkg_description="The Web framework for perfectionists with deadlines."
@@ -14,7 +16,6 @@ pkg_build_deps=(
 pkg_deps=(
   core/tzdata
 )
-pkg_dirname=Django-${pkg_version}
 
 do_prepare() {
   pip install wheel
@@ -27,15 +28,14 @@ do_prepare() {
 }
 
 do_build() {
-  build_line 'Python wheel (universal)'
   make -f extras/Makefile bdist_wheel
 }
 
 do_check() {
-  build_line 'Install python wheel'
+  build_line 'Test install python wheel'
   pip install --no-index \
     --find-links="$HAB_CACHE_SRC_PATH/$pkg_dirname/dist" \
-    "Django==$pkg_version"
+    "$python_name==$pkg_version"
 
   # TODO: execute runtests.py against installed version
   # https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/unit-tests/#quickstart

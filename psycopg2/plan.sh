@@ -1,7 +1,9 @@
-pkg_name=psycopg2
+python_name=psycopg2
+pkg_name=python-psycopg2
 pkg_origin=wheelhouse
 pkg_version=2.6.2
-pkg_source=https://pypi.org/packages/source/p/${pkg_name}/${pkg_name}-${pkg_version}.tar.gz
+pkg_dirname=${python_name}-${pkg_version}
+pkg_source=https://pypi.org/packages/source/p/psycopg2/${pkg_dirname}.tar.gz
 pkg_shasum=70490e12ed9c5c818ecd85d185d363335cc8a8cbf7212e3c185431c79ff8c05c
 pkg_maintainer="George Marshall <george@georgemarshall.name>"
 pkg_description="Python-PostgreSQL Database Adapter"
@@ -14,32 +16,21 @@ pkg_build_deps=(
 pkg_deps=(
   core/postgresql
   core/python
-  core/python2
 )
 
 do_prepare() {
-  pip2 install wheel
-  pip3 install wheel
+  pip install wheel
 }
 
 do_build() {
-  build_line 'Build python2 wheel'
-  python2 setup.py bdist_wheel
-
-  build_line 'Build python3 wheel'
-  python3 setup.py bdist_wheel
+  python setup.py bdist_wheel
 }
 
 do_check() {
-  build_line 'Test install python2 wheel'
-  pip2 install --no-index \
+  build_line 'Test install python wheel'
+  pip install --no-index \
     --find-links="$HAB_CACHE_SRC_PATH/$pkg_dirname/dist" \
-    "$pkg_name==$pkg_version"
-
-  build_line 'Test install python3 wheel'
-  pip3 install --no-index \
-    --find-links="$HAB_CACHE_SRC_PATH/$pkg_dirname/dist" \
-    "$pkg_name==$pkg_version"
+    "$python_name==$pkg_version"
 
   # TODO: Run module unit tests
 }
