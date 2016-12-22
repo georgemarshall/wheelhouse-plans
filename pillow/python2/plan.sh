@@ -1,17 +1,8 @@
 source ../plan.sh
 
 pkg_name=python2-pillow
-pkg_build_deps=(
-  core/gcc
-)
 pkg_deps=(
-  core/freetype
-  core/lcms2
-# TODO: Create PR for core/libimagequant
-  core/libjpeg-turbo
-  core/libtiff
-  core/libwebp
-  core/openjpeg
+  ${pkg_base_deps[@]}
   core/python2
-  core/zlib
 )
+pkg_python_dirs=(lib/python2.7/site-packages)
