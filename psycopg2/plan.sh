@@ -13,29 +13,21 @@ pkg_build_deps=(
   core/gcc
   core/make
 )
-pkg_deps=(
+pkg_base_deps=(
   core/postgresql
+)
+pkg_deps=(
+  ${pkg_base_deps[@]}
   core/python
 )
-
-do_prepare() {
-  pip install wheel
-}
+pkg_python_dirs=(lib/python3.5/site-packages)
 
 do_build() {
-  python setup.py bdist_wheel
-}
-
-do_check() {
-  build_line 'Test install python wheel'
-  pip install --no-index \
-    --find-links="$HAB_CACHE_SRC_PATH/$pkg_dirname/dist" \
-    "$python_name==$pkg_version"
-
-  # TODO: Run module unit tests
+  python setup.py build
 }
 
 do_install() {
-  mkdir -p "$pkg_prefix/wheelhouse"
-  cp -r dist/*.whl "$pkg_prefix/wheelhouse"
+  python setup.py install \
+    --prefix="$pkg_prefix" \
+    --old-and-unmanageable # bypass egg install
 }

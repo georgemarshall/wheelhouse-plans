@@ -9,39 +9,23 @@ pkg_maintainer="George Marshall <george@georgemarshall.name>"
 pkg_description="The Web framework for perfectionists with deadlines."
 pkg_upstream_url=https://www.djangoproject.com/
 pkg_license=('BSD-3-Clause')
-pkg_build_deps=(
-  core/make
+pkg_deps=(
   core/python
 )
-pkg_deps=(
-  core/tzdata
-)
-
-do_prepare() {
-  pip install wheel
-
-  build_line 'Patch hard coded zoneinfo paths'
-  _zoneinfo="$(pkg_path_for core/tzdata)/share/zoneinfo"
-  find . -type f -name '*.py' -exec \
-    sed -i -- "s%/usr/share/zoneinfo%$_zoneinfo%g" {} +
-  unset _zoneinfo
-}
+pkg_bin_dirs=(bin)
+pkg_python_dirs=(lib/python3.5/site-packages)
 
 do_build() {
-  make -f extras/Makefile bdist_wheel
+  python setup.py build
 }
 
-do_check() {
-  build_line 'Test install python wheel'
-  pip install --no-index \
-    --find-links="$HAB_CACHE_SRC_PATH/$pkg_dirname/dist" \
-    "$python_name==$pkg_version"
-
-  # TODO: execute runtests.py against installed version
-  # https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/unit-tests/#quickstart
-}
+# TODO: execute runtests.py
+#do_check() {
+#   https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/unit-tests/#quickstart
+#}
 
 do_install() {
-  mkdir -p "$pkg_prefix/wheelhouse"
-  cp -r dist/*.whl "$pkg_prefix/wheelhouse"
+  python setup.py install \
+    --prefix="$pkg_prefix" \
+    --old-and-unmanageable # bypass egg install
 }

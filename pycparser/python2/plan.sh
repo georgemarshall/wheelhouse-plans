@@ -1,6 +1,6 @@
 source ../plan.sh
 
-pkg_name=python2-cython
+pkg_name=python2-pycparser
 pkg_deps=(
   core/python2
 )
